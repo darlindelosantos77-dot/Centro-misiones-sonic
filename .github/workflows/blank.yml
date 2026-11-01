@@ -1,0 +1,46 @@
+name: Crear APK Centro de Misiones
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar proyecto
+        uses: actions/checkout@v4
+
+      - name: Extraer archivos ZIP
+        run: |
+          unzip -q Centro_Misiones_Proyecto_Android.zip -d extraido
+
+      - name: Preparar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Preparar Android
+        uses: android-actions/setup-android@v3
+
+      - name: Instalar herramientas Android
+        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Preparar Gradle
+        uses: gradle/gradle-build-action@v3
+        with:
+          gradle-version: '8.9'
+
+      - name: Compilar APK
+        working-directory: extraido/CentroMisionesAndroid
+        run: gradle assembleDebug
+
+      - name: Guardar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Centro-de-Misiones-APK
+          path: extraido/CentroMisionesAndroid/app/build/outputs/apk/debug/app-debug.apk
+          
