@@ -20,6 +20,10 @@ jobs:
         run: |
           sed -i "/com.android.application' version/a\\    id 'org.jetbrains.kotlin.android' version '2.0.21' apply false" extraido/CentroMisionesAndroid/build.gradle
           sed -i "/id 'com.android.application'/a\\    id 'org.jetbrains.kotlin.android'" extraido/CentroMisionesAndroid/app/build.gradle
+                - name: Configurar Java 17
+         run: |
+          sed -i '/compileOptions {/a\        sourceCompatibility JavaVersion.VERSION_17\n        targetCompatibility JavaVersion.VERSION_17' extraido/CentroMisionesAndroid/app/build.gradle
+          sed -i '/kotlinOptions {/a\        jvmTarget = "17"' extraido/CentroMisionesAndroid/app/build.gradle
       - name: Preparar Java
         uses: actions/setup-java@v4
         with:
