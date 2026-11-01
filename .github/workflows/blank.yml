@@ -16,7 +16,10 @@ jobs:
       - name: Extraer archivos ZIP
         run: |
           unzip -q Centro_Misiones_Proyecto_Android.zip -d extraido
-
+      - name: Activar Kotlin
+        run: |
+          sed -i "/com.android.application' version/a\\    id 'org.jetbrains.kotlin.android' version '2.0.21' apply false" extraido/CentroMisionesAndroid/build.gradle
+          sed -i "/id 'com.android.application'/a\\    id 'org.jetbrains.kotlin.android'" extraido/CentroMisionesAndroid/app/build.gradle
       - name: Preparar Java
         uses: actions/setup-java@v4
         with:
